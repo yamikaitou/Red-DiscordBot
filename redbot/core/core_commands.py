@@ -1581,6 +1581,13 @@ class Core(commands.Cog, CoreLogic):
         else:
             osver = "Could not parse OS, report this on Github."
         user_who_ran = getpass.getuser()
+        if hasattr(sys, "real_prefix") or (
+            hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+        ):
+            venv = "(venv)"
+            venve = "Yes"
+        else:
+            venve = "No"
 
         if await ctx.embed_requested():
             e = discord.Embed(color=await ctx.embed_colour())
@@ -1592,11 +1599,12 @@ class Core(commands.Cog, CoreLogic):
             e.add_field(name="System arch", value=platform.machine(), inline=True)
             e.add_field(name="User", value=user_who_ran, inline=True)
             e.add_field(name="OS version", value=osver, inline=False)
+            e.add_field(name="VirtualEnv", value=venve, inline=False)
             await ctx.send(embed=e)
         else:
             info = (
                 "Debug Info for Red\n\n"
-                + "Red version: {}\n".format(redver)
+                + "Red version: {} {}\n".format(redver, venv)
                 + "Python version: {}\n".format(pyver)
                 + "Discord.py version: {}\n".format(dpy_version)
                 + "Pip version: {}\n".format(pipver)

@@ -350,9 +350,11 @@ def debug_info():
         os_info = distro.linux_distribution()
         osver = "{} {}".format(os_info[0], os_info[1]).strip()
     user_who_ran = getpass.getuser()
+    if is_venv():
+        venv = "(venv)"
     info = (
         "Debug Info for Red\n\n"
-        + "Python version: {}\n".format(pyver)
+        + "Python version: {} {}\n".format(pyver, venv)
         + "Red version: {}\n".format(redver)
         + "OS version: {}\n".format(osver)
         + "System arch: {}\n".format(platform.machine())

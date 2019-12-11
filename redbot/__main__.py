@@ -217,6 +217,36 @@ def _copy_data(data):
     return True
 
 
+def debug_info():
+    pyver = sys.version
+    redver = pkg_resources.get_distribution("Red-DiscordBot").version
+    if IS_WINDOWS:
+        os_info = platform.uname()
+        osver = "{} {} (version {}) {}".format(
+            os_info.system, os_info.release, os_info.version, os_info.machine
+        )
+    elif IS_MAC:
+        os_info = platform.mac_ver()
+        osver = "Mac OSX {} {}".format(os_info[0], os_info[2])
+    else:
+        os_info = distro.linux_distribution()
+        osver = "{} {}".format(os_info[0], os_info[1]).strip()
+    user_who_ran = getpass.getuser()
+    if hasattr(sys, "real_prefix") or (
+        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+    ):
+        venv = "(venv)"
+    info = (
+        "Debug Info for Red\n\n"
+        + "Python version: {} {}\n".format(pyver, venv)
+        + "Red version: {}\n".format(redver)
+        + "OS version: {}\n".format(osver)
+        + "System arch: {}\n".format(platform.machine())
+        + "User: {}\n".format(user_who_ran)
+    )
+    print(info)
+
+
 async def sigterm_handler(red, log):
     log.info("SIGTERM received. Quitting...")
     await red.shutdown(restart=False)
@@ -234,6 +264,9 @@ def main():
     elif not cli_flags.instance_name and (not cli_flags.no_instance or cli_flags.edit):
         print("Error: No instance name was provided!")
         sys.exit(1)
+    elif cli_flags.debuginfo:
+        debug_info()
+        sys.exit(0)
     if cli_flags.no_instance:
         print(
             "\033[1m"

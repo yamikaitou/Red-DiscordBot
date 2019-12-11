@@ -1,0 +1,2 @@
+Add `--debuginfo` to `redbot`
+Add venv info to debuginfo

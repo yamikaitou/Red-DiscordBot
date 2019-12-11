@@ -189,6 +189,11 @@ def parse_cli_flags(args):
         ),
     )
     parser.add_argument(
+        "--debuginfo",
+        action="store_true",
+        help="Prints basic debug info that would be useful for support",
+    )
+    parser.add_argument(
         "instance_name", nargs="?", help="Name of the bot instance created during `redbot-setup`."
     )
 
